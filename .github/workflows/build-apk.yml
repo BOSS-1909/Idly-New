@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:4.2.1
-      env:
-        HOME: /root
 
     steps:
       - name: Code auschecken
@@ -25,6 +23,12 @@ jobs:
             -storepass android -alias androiddebugkey \
             -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: Export-Vorlagen an richtigen Ort kopieren
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates
+          cp -r /root/.local/share/godot/export_templates/4.2.1.stable ~/.local/share/godot/export_templates/
+          ls -la ~/.local/share/godot/export_templates/4.2.1.stable
 
       - name: APK exportieren (Debug)
         run: |
