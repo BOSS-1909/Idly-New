@@ -1,0 +1,44 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    name: Godot Android Export
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.2.1
+
+    steps:
+      - name: Code auschecken
+        uses: actions/checkout@v4
+
+      - name: Debug-Keystore für Godot einrichten
+        run: |
+          mkdir -p ~/.android
+          keytool -genkey -v -keystore ~/.android/debug.keystore \
+            -storepass android -alias androiddebugkey \
+            -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: Godot Editor-Einstellungen importieren
+        run: |
+          mkdir -p ~/.config/godot
+          godot --headless --export-debug "Android" build/idle-rpg.apk --quit || true
+
+      - name: Projekt importieren (Assets)
+        run: godot --headless --import
+
+      - name: APK exportieren (Debug)
+        run: |
+          mkdir -p build
+          godot --headless --export-debug "Android" build/idle-rpg.apk
+
+      - name: APK als Download bereitstellen
+        uses: actions/upload-artifact@v4
+        with:
+          name: idle-rpg-apk
+          path: build/idle-rpg.apk
