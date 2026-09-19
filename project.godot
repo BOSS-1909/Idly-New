@@ -1,0 +1,21 @@
+; Engine configuration file.
+; Godot 4.x Projekt: Idle-RPG
+
+config_version=5
+
+[application]
+
+config/name="Idle RPG"
+run/main_scene="res://Main.tscn"
+config/features=PackedStringArray("4.2")
+
+[display]
+
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/handheld/orientation="portrait"
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="mobile"
