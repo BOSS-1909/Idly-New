@@ -24,18 +24,10 @@ jobs:
             -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US"
 
-      - name: Godot Editor-Einstellungen importieren
-        run: |
-          mkdir -p ~/.config/godot
-          godot --headless --export-debug "Android" build/idle-rpg.apk --quit || true
-
-      - name: Projekt importieren (Assets)
-        run: godot --headless --import
-
       - name: APK exportieren (Debug)
         run: |
           mkdir -p build
-          godot --headless --export-debug "Android" build/idle-rpg.apk
+          godot --headless --export-debug "Android" build/idle-rpg.apk --verbose
 
       - name: APK als Download bereitstellen
         uses: actions/upload-artifact@v4
